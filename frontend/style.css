@@ -1,0 +1,24 @@
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background: #ffffff;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+}
+body.dark {
+    background: #121212;
+    color: #eee;
+}
+#form-container select, #form-container input {
+    margin: 5px;
+    padding: 5px;
+}
+button {
+    margin: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+#harita {
+    width: 100%;
+}
