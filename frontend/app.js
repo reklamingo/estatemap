@@ -1,39 +1,36 @@
 let map;
 let markers = [];
+let polygons = [];
+let currentMapType = "satellite"; // Başlangıç uydu
 
 function initMap() {
-  const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles © Esri — Source: Esri, Earthstar Geographics'
+  map = new google.maps.Map(document.getElementById("harita"), {
+    center: { lat: 41.015137, lng: 28.979530 }, // İstanbul merkez
+    zoom: 14,
+    mapTypeId: google.maps.MapTypeId.SATELLITE,
   });
 
-  const esriRoad = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles © Esri'
-  });
-
-  map = L.map('harita', {
-    center: [41.015137, 28.979530],
-    zoom: 13,
-    layers: [esriSatellite]
-  });
-
-  const baseMaps = {
-    "Esri Uydu Görüntüsü": esriSatellite,
-    "Esri Yol Haritası": esriRoad
-  };
-
-  L.control.layers(baseMaps).addTo(map);
-
-  map.on('click', function(e) {
-    const iconSelection = prompt('İşaret ekle: 🏫=Okul, 🛒=Market, 🌳=Park, 🏥=Hastane, 🚏=Durağı');
+  map.addListener("click", (e) => {
+    const iconSelection = prompt("İşaret ekle: 🏫=Okul, 🛒=Market, 🌳=Park, 🏥=Hastane, 🚏=Durağı");
     if (iconSelection) {
-      const marker = L.marker(e.latlng).addTo(map).bindPopup(iconSelection).openPopup();
+      const marker = new google.maps.Marker({
+        position: e.latLng,
+        map: map,
+        label: iconSelection,
+      });
       markers.push(marker);
     }
   });
 }
 
-function toggleTheme() {
-  document.body.classList.toggle('dark');
+function toggleMapType() {
+  if (currentMapType === "satellite") {
+    map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+    currentMapType = "roadmap";
+  } else {
+    map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+    currentMapType = "satellite";
+  }
 }
 
 function sorgula() {
@@ -44,35 +41,39 @@ function sorgula() {
   const parsel = document.getElementById('parsel').value;
 
   fetch(`https://ada-parsel-backend.onrender.com/parsel?il=${il}&ilce=${ilce}&mahalle=${mahalle}&ada=${ada}&parsel=${parsel}`)
-  .then(response => response.json())
-  .then(data => {
-    if (data.features.length > 0) {
-      const coords = data.features[0].geometry.coordinates[0].map(c => [c[1], c[0]]);
-      const polygon = L.polygon(coords, { color: 'green' }).addTo(map);
-      map.fitBounds(polygon.getBounds());
-    } else {
-      alert('Parsel bulunamadı!');
-    }
-  })
-  .catch(error => {
-    console.error(error);
-    alert('Bir hata oluştu.');
-  });
-}
+    .then(response => response.json())
+    .then(data => {
+      if (data.features.length > 0) {
+        const coords = data.features[0].geometry.coordinates[0].map(c => ({ lat: c[1], lng: c[0] }));
 
-function indir() {
-  html2canvas(document.querySelector("#harita")).then(canvas => {
-    const link = document.createElement('a');
-    link.download = 'parsel.png';
-    link.href = canvas.toDataURL();
-    link.click();
-  });
-}
+        // Önce eski polygonları temizle
+        polygons.forEach(poly => poly.setMap(null));
+        polygons = [];
 
-window.onload = function() {
-  initMap();
-  populateIller();
-};
+        const polygon = new google.maps.Polygon({
+          paths: coords,
+          strokeColor: "#3ecf00",
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: "#3ecf00",
+          fillOpacity: 0.2,
+        });
+        polygon.setMap(map);
+        polygons.push(polygon);
+
+        // Parsel görünür olacak şekilde zoom yap
+        const bounds = new google.maps.LatLngBounds();
+        coords.forEach(coord => bounds.extend(coord));
+        map.fitBounds(bounds);
+      } else {
+        alert('Parsel bulunamadı!');
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      alert('Bir hata oluştu.');
+    });
+}
 
 function populateIller() {
   const ilSelect = document.getElementById('il');
@@ -105,3 +106,5 @@ function populateIller() {
     }
   });
 }
+
+window.onload = populateIller;
