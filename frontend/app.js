@@ -1,38 +1,31 @@
-
 let map;
+let markers = [];
+
 function initMap() {
-    map = L.map('harita').setView([41.015137, 28.979530], 10);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-    }).addTo(map);
-    map.on('click', function(e) {
-        const marker = L.marker(e.latlng).addTo(map);
-    });
-}
+  const googleSatellite = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}&key=AIzaSyD9cmP1cnl80fu5jUg3WZvzSB9yZI_AC90', {
+    attribution: 'Map data © Google'
+  });
 
-function toggleTheme() {
-    document.body.classList.toggle('dark');
-}
+  const googleRoad = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&key=AIzaSyD9cmP1cnl80fu5jUg3WZvzSB9yZI_AC90', {
+    attribution: 'Map data © Google'
+  });
 
-function sorgula() {
-    alert("Bu versiyonda demo polygon gösterilecektir.");
-    const polygon = L.polygon([
-        [41.015137, 28.979530],
-        [41.025137, 28.989530],
-        [41.035137, 28.979530]
-    ]).addTo(map);
-    map.fitBounds(polygon.getBounds());
-}
+  map = L.map('harita', {
+    layers: [googleSatellite] // Başlangıçta Uydu
+  }).setView([41.015137, 28.979530], 13);
 
-function indir() {
-    html2canvas(document.querySelector("#harita")).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'parsel.png';
-        link.href = canvas.toDataURL();
-        link.click();
-    });
-}
+  const baseMaps = {
+    "Uydu Görüntüsü (Google)": googleSatellite,
+    "Yol Haritası (Google)": googleRoad
+  };
 
-window.onload = function() {
-    initMap();
-};
+  L.control.layers(baseMaps).addTo(map);
+
+  map.on('click', function(e) {
+    const iconSelection = prompt('İşaret ekle: 🏫=Okul, 🛒=Market, 🌳=Park, 🏥=Hastane, 🚏=Durağı');
+    if (iconSelection) {
+      const marker = L.marker(e.latlng).addTo(map).bindPopup(iconSelection).openPopup();
+      markers.push(marker);
+    }
+  });
+}
