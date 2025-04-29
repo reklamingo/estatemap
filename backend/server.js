@@ -11,7 +11,7 @@ app.use(express.json());
 app.get('/parsel', async (req, res) => {
   const { il, ilce, mahalle, ada, parsel } = req.query;
   if (!il || !ilce || !mahalle || !ada || !parsel) {
-    return res.status(400).send('Eksik parametre');
+    return res.status(400).json({ error: 'Eksik parametre' });
   }
 
   try {
@@ -20,7 +20,7 @@ app.get('/parsel', async (req, res) => {
     res.json(response.data);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send('TKGM servisine erişilemedi.');
+    res.status(500).json({ error: 'TKGM servisine erişilemedi.' });
   }
 });
 
