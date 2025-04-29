@@ -40,7 +40,7 @@ function sorgula() {
   const ada = document.getElementById('ada').value;
   const parsel = document.getElementById('parsel').value;
 
-  const url = `https://ada-parsel-backend.onrender.com/parsel?il=${il}&ilce=${ilce}&mahalle=${mahalle}&ada=${ada}&parsel=${parsel}`;
+  const url = `https://ada-parsel-backend.onrender.com/parsel?il=${encodeURIComponent(il)}&ilce=${encodeURIComponent(ilce)}&mahalle=${encodeURIComponent(mahalle)}&ada=${ada}&parsel=${parsel}`;
 
   fetch(url)
     .then(response => {
