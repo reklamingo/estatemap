@@ -2,23 +2,23 @@ let map;
 let markers = [];
 
 function initMap() {
-  const googleSatellite = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}&key=AIzaSyD9cmP1cnl80fu5jUg3WZvzSB9yZI_AC90', {
-    attribution: 'Map data © Google'
+  const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles © Esri — Source: Esri, Earthstar Geographics'
   });
 
-  const googleRoad = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&key=AIzaSyD9cmP1cnl80fu5jUg3WZvzSB9yZI_AC90', {
-    attribution: 'Map data © Google'
+  const esriRoad = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles © Esri'
   });
 
   map = L.map('harita', {
     center: [41.015137, 28.979530],
     zoom: 13,
-    layers: [googleSatellite]
+    layers: [esriSatellite]
   });
 
   const baseMaps = {
-    "Google Uydu Görüntüsü": googleSatellite,
-    "Google Yol Haritası": googleRoad
+    "Esri Uydu Görüntüsü": esriSatellite,
+    "Esri Yol Haritası": esriRoad
   };
 
   L.control.layers(baseMaps).addTo(map);
