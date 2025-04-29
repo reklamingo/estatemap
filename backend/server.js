@@ -15,7 +15,7 @@ app.get('/parsel', async (req, res) => {
   }
 
   try {
-    const url = \`https://cbsservis.tkgm.gov.tr/arcgis/services/TKGM_Kadastro/MapServer/WFSServer?service=WFS&version=1.1.0&request=GetFeature&typeName=Kadastro_Parsel&outputFormat=application/json&CQL_FILTER=il_adi='\${il}' AND ilce_adi='\${ilce}' AND mahalle_adi='\${mahalle}' AND ada_no=\${ada} AND parsel_no=\${parsel}\`;
+    const url = `https://cbsservis.tkgm.gov.tr/arcgis/services/TKGM_Kadastro/MapServer/WFSServer?service=WFS&version=1.1.0&request=GetFeature&typeName=Kadastro_Parsel&outputFormat=application/json&CQL_FILTER=il_adi='${il}' AND ilce_adi='${ilce}' AND mahalle_adi='${mahalle}' AND ada_no=${ada} AND parsel_no=${parsel}`;
     const response = await axios.get(url);
     res.json(response.data);
   } catch (error) {
@@ -25,5 +25,5 @@ app.get('/parsel', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(\`Backend ${PORT} portunda çalışıyor.\`);
+  console.log(`Backend ${PORT} portunda çalışıyor.`);
 });
