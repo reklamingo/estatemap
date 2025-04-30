@@ -1,1 +1,25 @@
-/* stil */
+body {
+  font-family: sans-serif;
+  padding: 20px;
+  background: #f5f5f5;
+}
+
+input, select, button {
+  margin: 5px;
+  padding: 8px;
+}
+
+button {
+  background: #3ecf00;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.marker-box {
+  position: absolute;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  font-size: 12px;
+}
