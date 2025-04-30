@@ -1,1 +1,26 @@
-<!-- geçmiş görseller -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Geçmiş Görseller</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Geçmişte İndirdiğiniz Görseller</h2>
+  <ul id="list"></ul>
+  <script>
+    fetch('/api/images/my-images', {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+    })
+    .then(res => res.json())
+    .then(data => {
+      const ul = document.getElementById('list');
+      data.forEach(img => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="/uploads/${img.filename}" download>${img.filename}</a>`;
+        ul.appendChild(li);
+      });
+    });
+  </script>
+</body>
+</html>
