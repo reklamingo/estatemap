@@ -1,1 +1,33 @@
-<!-- register -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Kayıt Ol</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Kayıt Ol</h2>
+  <form id="registerForm">
+    <input type="email" id="email" placeholder="E-posta" required />
+    <input type="password" id="password" placeholder="Şifre" required />
+    <button type="submit">Kayıt Ol</button>
+  </form>
+  <p>Zaten hesabın var mı? <a href="login.html">Giriş Yap</a></p>
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value
+        })
+      });
+      const data = await res.json();
+      alert(data.message || 'Başarısız');
+      if (data.message) window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>
