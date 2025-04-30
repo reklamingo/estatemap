@@ -1,1 +1,33 @@
-<!-- ana sayfa -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Ada Parsel Görüntüleyici</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API_KEY&callback=initMap" async defer></script>
+</head>
+<body>
+  <h2>Ada Parsel Görüntüleyici</h2>
+  <select id="ilSelect"></select>
+  <select id="ilceSelect"></select>
+  <select id="mahalleSelect"></select>
+  <input type="text" id="adaInput" placeholder="Ada No" />
+  <input type="text" id="parselInput" placeholder="Parsel No" />
+  <button id="sorgulaBtn">Sorgula</button>
+  <br />
+  <label>Pin rengi:</label>
+  <select id="pinColor">
+    <option value="red">Kırmızı</option>
+    <option value="yellow">Sarı</option>
+    <option value="blue">Mavi</option>
+    <option value="white">Beyaz</option>
+  </select>
+  <input type="text" id="pinText" placeholder="Açıklama" />
+  <input type="color" id="boxColor" />
+  <button id="indirBtn">PNG İndir</button>
+  <a href="gecmis.html">Geçmişim</a>
+  <div id="map" style="width:100%; height:80vh; margin-top: 10px;"></div>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
