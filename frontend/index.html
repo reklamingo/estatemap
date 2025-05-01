@@ -1,27 +1,34 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ada Parsel Harita</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="app.js" defer></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhn6CJiR0fN_RvsPKoCuOL3m04IKtNbF0&callback=initMap" async defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TKGM Parsel Sorgu</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- html2canvas -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <!-- Google Maps -->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhn6CJiR0fN_RvsPKoCuOL3m04IKtNbF0&callback=initMap">
+  </script>
 </head>
 <body>
-  <div class="topbar">
-    <button onclick="logout()">Çıkış Yap</button>
-    <button onclick="window.location.href='gecmis.html'">Geçmiş Görsellerim</button>
+  <h1>Parsel Sorgu Uygulaması</h1>
+
+  <div id="controls">
+    <input type="text" id="il" placeholder="İl" />
+    <input type="text" id="ilce" placeholder="İlçe" />
+    <input type="text" id="mahalle" placeholder="Mahalle" />
+    <input type="text" id="ada" placeholder="Ada" />
+    <input type="text" id="parsel" placeholder="Parsel" />
+    <button onclick="sorgula()">Sorgula</button>
+    <button onclick="downloadMap()">Haritayı İndir</button>
   </div>
 
-  <div id="map"></div>
+  <div id="map" style="width: 100%; height: 500px; margin-top: 20px;"></div>
 
-  <div class="actions">
-    <button onclick="addPin('kirmizi')">Kırmızı Pin</button>
-    <button onclick="addPin('mavi')">Mavi Pin</button>
-    <button onclick="addPin('sari')">Sarı Pin</button>
-    <button onclick="addPin('beyaz')">Beyaz Pin</button>
-    <button onclick="downloadMap()">PNG Olarak İndir</button>
-  </div>
+  <script src="app.js"></script>
 </body>
 </html>
