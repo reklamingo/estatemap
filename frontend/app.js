@@ -2,7 +2,7 @@ let map;
 let polygon;
 let markers = [];
 
-const BASE_URL = 'https://ada-parsel-backend.onrender.com'; // kendi backend URL'in
+const BASE_URL = 'https://ada-parsel-backend.onrender.com';
 const token = localStorage.getItem('token');
 
 function initMap() {
