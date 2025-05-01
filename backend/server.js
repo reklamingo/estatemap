@@ -16,8 +16,6 @@ app.use('/api/parsel', require('./routes/parsel'));
 app.use('/api/images', require('./routes/images'));
 
 mongoose.connect(process.env.MONGO_URI)
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
   .then(() => {
     app.listen(PORT, () => {
       console.log('Sunucu çalışıyor: ' + PORT);
