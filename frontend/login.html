@@ -1,35 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Giriş Yap</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>Giriş Yap</h2>
-  <form id="loginForm">
-    <input type="email" id="email" placeholder="E-posta" required />
-    <input type="password" id="password" placeholder="Şifre" required />
-    <button type="submit">Giriş</button>
-  </form>
-  <p>Hesabın yok mu? <a href="register.html">Kayıt Ol</a></p>
+  <div class="form-container">
+    <h2>Giriş Yap</h2>
+    <form id="loginForm">
+      <input type="email" placeholder="E-posta" id="email" required>
+      <input type="password" placeholder="Şifre" id="password" required>
+      <button type="submit">Giriş</button>
+    </form>
+    <p>Hesabınız yok mu? <a href="register.html">Kayıt olun</a></p>
+  </div>
+
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async e => {
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const res = await fetch('/api/auth/login', {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: document.getElementById('email').value,
-          password: document.getElementById('password').value
-        })
+        body: JSON.stringify({ email, password })
       });
-      const data = await res.json();
-      if (data.token) {
+
+      const data = await response.json();
+      if (response.ok) {
         localStorage.setItem('token', data.token);
         window.location.href = 'index.html';
       } else {
-        alert('Giriş başarısız');
+        alert(data.error || 'Giriş başarısız.');
       }
     });
   </script>
