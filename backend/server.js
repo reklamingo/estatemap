@@ -1,24 +1,23 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
+const dotenv = require('dotenv');
 const path = require('path');
-require('dotenv').config();
+const { PrismaClient } = require('@prisma/client');
 
+dotenv.config();
+const prisma = new PrismaClient();
 const app = express();
-const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Rotalar
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/parsel', require('./routes/parsel'));
 app.use('/api/images', require('./routes/images'));
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log('Sunucu çalışıyor: ' + PORT);
-    });
-  })
-  .catch(err => console.log('Mongo bağlantı hatası:', err));
+// Sunucu başlat
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Sunucu ${PORT} portunda çalışıyor`);
+});
