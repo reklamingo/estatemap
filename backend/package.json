@@ -1,24 +1,20 @@
 {
-  "name": "parsel-backend",
+  "name": "tkgm-parsel-backend",
   "version": "1.0.0",
-  "description": "Ada-Parsel projesi için PostgreSQL backend",
+  "description": "Ada-Parsel sorgulama backend servisi",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js",
-    "prisma": "prisma"
+    "start": "node server.js"
   },
+  "keywords": [],
+  "author": "Reklamingo",
+  "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^5.0.0",
-    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "mongoose": "^7.6.1",
     "jsonwebtoken": "^9.0.0",
-    "multer": "^1.4.5-lts.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1",
-    "prisma": "^5.0.0"
+    "multer": "^1.4.5"
   }
 }
