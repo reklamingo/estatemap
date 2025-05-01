@@ -1,19 +1,24 @@
 {
-  "name": "backend",
+  "name": "tkgm-parsel-sorgu",
   "version": "1.0.0",
-  "description": "Ada parsel backend",
+  "description": "TKGM Ada-Parsel Sorgulama Sistemi",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "dev": "node server.js",
+    "build": "npx prisma generate",
+    "start": "node server.js",
+    "postinstall": "npx prisma generate"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
+    "@prisma/client": "^5.10.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "mongoose": "^7.0.3",
-    "multer": "^1.4.5-lts.1",
-    "jsonwebtoken": "^9.0.2",
-    "soap": "^0.42.0"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "prisma": "^5.10.0"
   }
 }
