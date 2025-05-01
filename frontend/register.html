@@ -1,32 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kayıt Ol</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>Kayıt Ol</h2>
-  <form id="registerForm">
-    <input type="email" id="email" placeholder="E-posta" required />
-    <input type="password" id="password" placeholder="Şifre" required />
-    <button type="submit">Kayıt Ol</button>
-  </form>
-  <p>Zaten hesabın var mı? <a href="login.html">Giriş Yap</a></p>
+  <div class="form-container">
+    <h2>Kayıt Ol</h2>
+    <form id="registerForm">
+      <input type="email" placeholder="E-posta" id="email" required>
+      <input type="password" placeholder="Şifre" id="password" required>
+      <button type="submit">Kayıt</button>
+    </form>
+    <p>Zaten hesabınız var mı? <a href="login.html">Giriş yap</a></p>
+  </div>
+
   <script>
-    document.getElementById('registerForm').addEventListener('submit', async e => {
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const res = await fetch('/api/auth/register', {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: document.getElementById('email').value,
-          password: document.getElementById('password').value
-        })
+        body: JSON.stringify({ email, password })
       });
-      const data = await res.json();
-      alert(data.message || 'Başarısız');
-      if (data.message) window.location.href = 'login.html';
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
+        window.location.href = 'login.html';
+      } else {
+        alert(data.error || 'Kayıt başarısız.');
+      }
     });
   </script>
 </body>
