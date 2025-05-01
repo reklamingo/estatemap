@@ -1,41 +1,53 @@
 const express = require('express');
 const multer = require('multer');
-const jwt = require('jsonwebtoken');
-const Image = require('../models/Image');
-const User = require('../models/User');
 const path = require('path');
+const jwt = require('jsonwebtoken');
+const { PrismaClient } = require('@prisma/client');
 
+const prisma = new PrismaClient();
 const router = express.Router();
 
-// Upload klasörü
-const storage = multer.diskStorage({
-  destination: './uploads/',
-  filename: (req, file, cb) => {
-    const name = Date.now() + path.extname(file.originalname);
-    cb(null, name);
+// Kullanıcı doğrulama middleware
+const auth = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'Token eksik' });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch {
+    return res.status(403).json({ error: 'Token geçersiz' });
   }
+};
+
+// Upload klasörü
+const uploadDir = path.join(__dirname, '../uploads');
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => cb(null, uploadDir),
+  filename: (_, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 });
 const upload = multer({ storage });
 
-// PNG upload
-router.post('/upload', upload.single('image'), async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-  await Image.create({
-    user: decoded.id,
-    filename: req.file.filename
+// Görsel yükle
+router.post('/upload', auth, upload.single('image'), async (req, res) => {
+  const image = await prisma.image.create({
+    data: {
+      filename: req.file.filename,
+      userId: req.user.userId
+    }
   });
 
-  res.json({ message: 'Yüklendi' });
+  res.json({ message: 'Görsel yüklendi', image });
 });
 
-// Geçmiş görseller
-router.get('/my-images', async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+// Kullanıcının geçmiş görselleri
+router.get('/my-images', auth, async (req, res) => {
+  const images = await prisma.image.findMany({
+    where: { userId: req.user.userId },
+    orderBy: { createdAt: 'desc' }
+  });
 
-  const images = await Image.find({ user: decoded.id });
   res.json(images);
 });
 
